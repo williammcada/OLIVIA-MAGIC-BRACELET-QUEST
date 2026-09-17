@@ -1,96 +1,82 @@
 # Project Brief — Olivia's Magic Bracelet Quest
 
-**Brief status:** Migration baseline / requires source verification where noted  
-**Brief version:** 0.1  
-**Last updated:** 18 September 2026  
-**Owner:** William McAda  
-**Product credit:** A WILLIAM MCADA PRODUCT  
-**Handbook repository:** `williammcada/mcada-project-handbook`  
-**Handbook baseline:** `6557a45aaa6d29d7d1abde808e6d0ac248b08820 (AI-START-HERE.md); UNIVERSAL-RULES.md @ aed6fe311aa2e88983f862a30a2d8f05d2ffc04d`  
-**Repository:** `williammcada/OLIVIA-MAGIC-BRACELET-QUEST`  
-**Canonical source status:** Existing GitHub repository. Current repository README identifies Version 0.4.0. Current latest commit observed during migration: `742869ec79eaa6897635e45ff197ed90eeeb8ae5`.  
-**Current project state:** Existing GitHub Pages/PWA project at v0.4.0; local progress only and no uploaded student/name data according to the current README.
+**Brief version:** 0.2 — audited documentation revision  
+**Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
+**Status:** Revised record for owner review; not an application release or fresh feature approval.  
+**Repository destination:** williammcada/OLIVIA-MAGIC-BRACELET-QUEST (verify existence/current branch before source edits).  
+**Current running version:** Not independently verified in this documentation task.  
+**Source/baseline:** Recorded v0.4.0 repository candidate 742869ec79eaa6897635e45ff197ed90eeeb8ae5. Current source/live state not reverified.  
+**Next work:** Preserve v0.4.0 and working browser-upload deployment route.
 
-## 1. Purpose and audience
+## 1. Purpose, audience and detailed scope
 
-A touch-first, single-player arithmetic adventure built around collecting beads, helping animals, bracelet-making, and age-appropriate addition/subtraction practice.
+- Young-child arithmetic adventure with 16-bit/Genesis-inspired art, animal rescues, bead collection and bracelet-making payoff. Preserve character/mascot visual references and friendly tone.
+- Math progression covers single-digit addition, two-digit plus one-digit, two-digit plus two-digit, adding within 20 and subtraction as selected. Adult settings control modes/scaffolds; audit actual ranges against source.
+- Avoid degenerate repetitive generation (reported 19+0/16+2 repetition). Retain optional removable counters and quick settings; do not reinstate hold-button lock or removed multiplication fact lock.
+- Preserve initial levels plus desert and ice/snow additions where delivered, approximately 25% length extension request, moving/falling platforms, Arctic seal and desert fox rescues.
+- Cloud flight replaced unicorn riding; preserve Lumi's Cloud Flight animation, obstacles and bright music rather than reverting to superseded ride mechanics.
+- Touch-first controls and local progress, supported PWA/offline behavior; iPhone layout must be checked separately from desktop success.
+- Use accepted GitHub Branch Deploy packaging where applicable. Prior hidden .github workflow uploads failed; do not force a manual workflow repair back into the standard upload route.
 
-**Primary audience / operator:** Young child player, primarily on touch devices, with adult-accessible settings.
+## 2. This task and boundaries
 
-## 2. Standards selection
+This revision repairs documentation only. It does not implement features, run application tests, upload source, deploy a site, or alter a repository. Retain the exact current source before implementation. Historical reported functionality is a preservation checklist to reconcile against that source, not permission to recreate the program from prose.
 
-**Universal baseline:** U-01 through U-08 where applicable.
+## 3. Standards and adoption
 
-**Conditional modules:** S-02 Curriculum/Assessment/Evidence; S-03 Live Classroom and Educational Games; S-04 Distribution/Deployment
+[Canonical handbook](https://github.com/williammcada/mcada-project-handbook). File blob revisions consulted: AI-START-HERE.md 6557a45aaa6d29d7d1abde808e6d0ac248b08820; UNIVERSAL-RULES.md aed6fe311aa2e88983f862a30a2d8f05d2ffc04d; CONDITIONAL-STANDARDS.md dad2d3a05ca0f18260196ea51ac6351bffffdc1c; PROJECT-TEMPLATE.md 574f4c6fcf19ecc2f9e27582fd856fb08123e8da. These are file blobs, not repository commit SHAs.
 
-Apply only the selected modules and project-local requirements. Do not import restrictions from unrelated projects.
+Relevant rules: U-01 identity, U-02 help, U-03 input validation, U-04 unambiguous math/text where applicable, U-05 reader/device, U-06 preservation, U-07 verification, U-08 local scope. Conditional selection: S-02, S-03, S-04.
+Baseline adoption: selected for this documentation task within existing user instructions. Handbook still labels shared scope/modules seeded/draft; no new global rule ratification is inferred. Project-specific approved decisions control their own scope.
 
-## 3. Project-specific requirements
+## 4. Must-retain behavior
 
-- Touch-first controls and readable child-facing UI.
-- Arithmetic progression must remain age appropriate and avoid repetitive or degenerate question patterns.
-- Counters/scaffolding must be removable when the adult wants less support.
-- Settings must be quick to access; do not use an inconvenient hold-button lock.
-- Preserve local-only progress/data behavior unless explicitly changed.
-- Animals, bracelet collection, cloud-flight/platforming identity, and the existing visual style remain project-local.
+The detailed scope above is the feature-preservation inventory. Preserve existing settings, data, accepted content, assets, exports and compatibility confirmed in source. Distinguish implemented behavior, accepted pending changes and historical requests during intake. A missing entry in this brief is not authorization to remove working behavior. Preserve valid user work during migrations and failures.
 
-## 4. Preserve from the current accepted project
+## 5. Source, release and deployment discipline
 
-- Bracelet/bead collection loop.
-- Saved animals and child-friendly story tone.
-- Current arithmetic modes and configurable scaffolding.
-- Existing added environments including desert and ice/snow content where present.
-- PWA/local-storage behavior and offline-friendly deployment characteristics already accepted.
+Recorded v0.4.0 repository candidate 742869ec79eaa6897635e45ff197ed90eeeb8ae5. Current source/live state not reverified.
 
-## 5. Relationship to other projects
+Record exact selected source filename/hash and repository commit when importing it; record live URL/version only after actually opening it. Unknown commit does not mean the product is unbuilt.
 
-- Independent family educational game; not a MathQuest cartridge.
-- Shares educational-game testing principles but retains its own audience, art, settings, and arithmetic progression.
+DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED CHECKPOINT → RELEASE → DEPLOY.
 
-A conceptual relationship is not proof of an implemented integration. Do not invent a shared API, data schema, identity layer, or deployment dependency without an explicit integration task.
+Use “implementation checkpoint” or “release candidate” before verification. Preserve candidate bytes and logs before packaging; recover that checkpoint after a ZIP/upload failure. Do not rebuild a verified implementation to fix delivery. Repository upload and website deployment are different operations; existing automatic deployments may run when main changes.
 
-## 6. Source and version discipline
+## 6. Known issues, conflicts and open evidence
 
-The exact current source artifact or repository commit must be identified before a substantive build. If the field above says the source is not yet established, first locate the latest known-good local file/ZIP or existing repository state and record its exact identity here.
+Historical iPhone display and hidden workflow upload problems; current fixes require testing. Child-facing settings and arithmetic variety must survive packaging updates.
 
-For substantial revisions use:
+| Conflict or risk | Required handling |
+| --- | --- |
+| Historical claim versus current source | Inspect exact source; keep historical claim labeled until verified. |
+| Proposed next scope versus working baseline | Use the approved version-specific specification; do not silently promote proposals. |
+| Other project rules | Do not import AAC quotas, other-game retry counts, or a shared backend without explicit scope. |
+| Handbook proposals | No additional exception or proposal is adopted by this brief. |
 
-**DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED CHECKPOINT → RELEASE → DEPLOY (when applicable)**
+## 7. Verification contract
 
-A packaging/export/deployment failure must not force reconstruction of an already verified build.
+Sample each configured math range, toggle counters/settings, complete each environment and bracelet ending, verify cloud flight and touch, save/reload and Pages subpath assets.
 
-## 7. Definition of done
+| Evidence required | Result in this task |
+| --- | --- |
+| Exact source candidate/commit identified and preserved | Not run — documentation revision only |
+| Project-specific checks above, with inputs and expected/actual results | Not run |
+| Save/import/export and malformed-input regression | Not run |
+| Intended devices and real deployment path, where applicable | Not run |
+| Version, release notes and delivered bytes agree | Not run |
 
-| # | Requirement / check | Result | Evidence / limitation |
-| ---: | --- | --- | --- |
-| 1 | Arithmetic questions are valid, varied, and correctly scored. | Not run | |
-| 2 | Touch controls work on claimed mobile devices. | Not run | |
-| 3 | Counter/scaffolding option behaves correctly. | Not run | |
-| 4 | Settings remain accessible to the adult without obstructing child play. | Not run | |
-| 5 | Progress persists locally as intended. | Not run | |
-| 6 | Build and GitHub Pages deployment serve the same version. | Not run | |
+The next build report must name the candidate, environment and test results; historical reports of passing tests do not transfer to a changed candidate.
 
-Allowed results: **Passed / Failed / Not run / Not applicable**. A "Passed" result requires an actual check against the identified candidate.
+## 8. Handoff and provenance
 
-## 8. Known issues and migration notes
+Required project records: Olivia_Magic_Bracelet_Quest_v0.4.0_GitHub_Branch_Deploy.zip; current source/assets; original visual references and release notes.
 
-The existing source of truth is already on GitHub. Preserve the v0.4.0 source while adding the documentation files from this pack.
+Provenance: previous migration brief and project-history audit in this conversation; directly read dossier/proposal where explicitly stated above. Records not explicitly marked read here are retrieval targets, not claims of fresh inspection. No current app code was tested for this brief.
 
-## 9. Handoff files
+Before substantive implementation retrieve these records, the current source, approved change spec and applicable handbook. If an indispensable spec is inaccessible, report the gap instead of filling it with invented details. Do not delete unique historical chats/assets until their contents are independently preserved.
 
-A substantive AI implementation task should retrieve or receive:
+## 9. Ecosystem boundary
 
-1. `AI-START-HERE.md`;
-2. `UNIVERSAL-RULES.md`;
-3. the relevant sections of `CONDITIONAL-STANDARDS.md`;
-4. this project brief;
-5. the exact current source artifact/commit;
-6. the approved version-specific change specification;
-7. applicable assets and deployment configuration.
+Shared principles do not establish shared code, accounts or interfaces. MathQuest is engagement, TestForge assessment design, GradePal learner-level evidence, and DataDiver institutional analytics. Integration remains separately specified unless confirmed in source. Other projects remain independent unless their brief explicitly says otherwise.
 
-Do not reconstruct the current implementation from a historical chat summary when the actual source should be available.
-
-## 10. Ownership
-
-**William McAda**  
-**A WILLIAM MCADA PRODUCT**

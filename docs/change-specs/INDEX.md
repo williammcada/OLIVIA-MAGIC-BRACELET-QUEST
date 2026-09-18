@@ -3,4 +3,4 @@
 | File | Status | Scope |
 | --- | --- | --- |
 | `v0.4-GITHUB-PAGES.md` | Released packaging record; deployment still requires live confirmation | GitHub Pages/PWA migration |
-| `MIGRATION-BASELINE.md` | Current documentation record | Preserve v0.4 source and child-facing design |
+| [`MIGRATION-BASELINE.md`](../MIGRATION-BASELINE.md) | Current source-identity record | Exact structured source identity and deployment-verification limits |

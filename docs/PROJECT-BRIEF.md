@@ -1,12 +1,12 @@
 # Project Brief — Olivia's Magic Bracelet Quest
 
-**Brief version:** 0.2 — audited documentation revision  
+**Brief version:** 0.3 — source-baseline normalization  
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
-**Status:** Revised record for owner review; not an application release or fresh feature approval.  
-**Repository destination:** williammcada/OLIVIA-MAGIC-BRACELET-QUEST (verify existence/current branch before source edits).  
-**Current running version:** Not independently verified in this documentation task.  
-**Source/baseline:** Recorded v0.4.0 repository candidate 742869ec79eaa6897635e45ff197ed90eeeb8ae5. Current source/live state not reverified.  
-**Next work:** Preserve v0.4.0 and working browser-upload deployment route.
+**Status:** Canonical source identity reconciled; release, functional and deployment verification remain separately stated.  
+**Repository:** `williammcada/OLIVIA-MAGIC-BRACELET-QUEST`, branch `main`.  
+**Current running version:** Unverified. The structured v0.4.0-labeled source is preserved; this normalization did not rerun tests or verify the hosted site.  
+**Source/baseline:** Canonical preserved source: structured repository at checkpoint `76148ebc47ad50b0f8116ff5de3b10b827b3d4dd`, with `src/` tree `ab4ef6c6dca531aa880b1e821b8d36b9b75f883a`, root `index.html` blob `78eaba29cd396bac176fd430d7e82e8c02341c3a`, and `public/` assets tree `cc9654c7328d2f6ba8537bfc935b3742811ffe02`. Repository release records label v0.4.0; live deployment remains unverified.  
+**Next work:** Preserve the v0.4.0 structured source and verify GitHub Pages, touch controls, iPhone layout, save/reload and the full child-facing progression before another release.  
 
 ## 1. Purpose, audience and detailed scope
 
@@ -20,7 +20,7 @@
 
 ## 2. This task and boundaries
 
-This revision repairs documentation only. It does not implement features, run application tests, upload source, deploy a site, or alter a repository. Retain the exact current source before implementation. Historical reported functionality is a preservation checklist to reconcile against that source, not permission to recreate the program from prose.
+This normalization establishes the exact repository source path, Git object identity and source-preservation checkpoint; creates the linked migration baseline; and retires stale pre-upload source-status wording. It does not change application behavior, approve new features, rerun product tests or convert source preservation into a release claim.
 
 ## 3. Standards and adoption
 
@@ -35,13 +35,13 @@ The detailed scope above is the feature-preservation inventory. Preserve existin
 
 ## 5. Source, release and deployment discipline
 
-Recorded v0.4.0 repository candidate 742869ec79eaa6897635e45ff197ed90eeeb8ae5. Current source/live state not reverified.
+Canonical preserved source: structured repository at checkpoint `76148ebc47ad50b0f8116ff5de3b10b827b3d4dd`, with `src/` tree `ab4ef6c6dca531aa880b1e821b8d36b9b75f883a`, root `index.html` blob `78eaba29cd396bac176fd430d7e82e8c02341c3a`, and `public/` assets tree `cc9654c7328d2f6ba8537bfc935b3742811ffe02`. Repository release records label v0.4.0; live deployment remains unverified.
 
-Record exact selected source filename/hash and repository commit when importing it; record live URL/version only after actually opening it. Unknown commit does not mean the product is unbuilt.
+See [`MIGRATION-BASELINE.md`](MIGRATION-BASELINE.md) for the authoritative source manifest and the checks actually performed.
 
 DESIGN → CHANGE SPEC → IMPLEMENT → CHECKPOINT → VERIFY → VERIFIED CHECKPOINT → RELEASE → DEPLOY.
 
-Use “implementation checkpoint” or “release candidate” before verification. Preserve candidate bytes and logs before packaging; recover that checkpoint after a ZIP/upload failure. Do not rebuild a verified implementation to fix delivery. Repository upload and website deployment are different operations; existing automatic deployments may run when main changes.
+Use “implementation checkpoint” or “release candidate” before verification. Preserve candidate bytes and logs before packaging; recover that checkpoint after a ZIP/upload failure. Do not rebuild a verified implementation to fix delivery. Repository upload and website deployment are different operations.
 
 ## 6. Known issues, conflicts and open evidence
 
@@ -60,7 +60,7 @@ Sample each configured math range, toggle counters/settings, complete each envir
 
 | Evidence required | Result in this task |
 | --- | --- |
-| Exact source candidate/commit identified and preserved | Not run — documentation revision only |
+| Exact source candidate/commit identified and preserved | Passed — canonical path and source checkpoint recorded in `docs/MIGRATION-BASELINE.md`; no functional verification inferred |
 | Project-specific checks above, with inputs and expected/actual results | Not run |
 | Save/import/export and malformed-input regression | Not run |
 | Intended devices and real deployment path, where applicable | Not run |
@@ -69,6 +69,8 @@ Sample each configured math range, toggle counters/settings, complete each envir
 The next build report must name the candidate, environment and test results; historical reports of passing tests do not transfer to a changed candidate.
 
 ## 8. Handoff and provenance
+
+Current source identity is recorded in [`MIGRATION-BASELINE.md`](MIGRATION-BASELINE.md). That manifest supersedes earlier unknown-source or pre-upload statements while preserving the original migration note as history.
 
 Required project records: Olivia_Magic_Bracelet_Quest_v0.4.0_GitHub_Branch_Deploy.zip; current source/assets; original visual references and release notes.
 

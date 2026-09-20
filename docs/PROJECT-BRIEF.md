@@ -1,6 +1,7 @@
 # Project Brief — Olivia's Magic Bracelet Quest
 
 **Brief version:** 0.4 — v0.5.0 math-expansion candidate  
+**Current candidate:** GitHub checkpoint `02118eda538775dc197859adae02cabf5b002b36`, full tree `270f72cff28e268b3811e8229481429c7db040c0`; see [verification record](VERIFICATION-v0.5.0.md). Historical v0.4 baseline details below are preserved for recovery.
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
 **Status:** v0.5.0 implementation candidate; automated verification and unrun browser/device/deployment checks are tracked in `VERIFICATION-v0.5.0.md`.  
 **Repository:** `williammcada/OLIVIA-MAGIC-BRACELET-QUEST`, branch `main`.  

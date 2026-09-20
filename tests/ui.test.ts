@@ -18,7 +18,7 @@ test('UI components: practice → scaffold → gate → rescue → bracelet → 
  document.body.innerHTML='<main id="app"><div id="game"></div><section id="ui"></section><div id="touch"></div></main>';
  localStorage.clear();vi.spyOn(Math,'random').mockReturnValue(.5);await import('../src/main');await vi.waitFor(()=>expect(document.getElementById('play')).toBeTruthy());
  click('play');click('go');expect(debug().active.phase).toBe('practice');const first=debug().problem;
- answer(9);expect(document.body.textContent).toContain('Let’s build it together.');answer(first.answer);answer(first.answer);expect(document.body.textContent).toContain('You built it!');expect(state().attempts[0].hint).toBe(true);expect(state().active.energy).toBe(2);click('next');
+ answer(first.answer+1);expect(document.body.textContent).toContain('Let’s build it together.');answer(first.answer);answer(first.answer);expect(document.body.textContent).toContain('You built it!');expect(state().attempts[0].hint).toBe(true);expect(state().active.energy).toBe(2);click('next');
  for(let i=0;i<4;i++){answer(debug().problem.answer);click('next');}
  expect(state().attempts).toHaveLength(5);expect(state().active.energy).toBe(6);click('adventure');expect(runtime.active.has('PlatformScene')).toBe(true);
  runtime.hooks.gate();expect(runtime.paused.has('PlatformScene')).toBe(true);for(let i=0;i<2;i++){answer(debug().problem.answer);click('next');}expect(state().active.gateOpen).toBe(true);expect(runtime.active.has('PlatformScene')).toBe(true);
@@ -63,4 +63,21 @@ test('UI components: practice → scaffold → gate → rescue → bracelet → 
  expect(state().active.gateOpen).toBe(true);expect(runtime.active.has('PlatformScene')).toBe(true);
  click('pause');click('controls');expect(document.body.textContent).toContain('Lumi moves forward');expect(document.body.textContent).toContain('Star Dash');click('return');
 
+ // Return to diagnostics and exercise every expanded input contract with counters enabled.
+ click('pause');click('home');click('parent');(document.getElementById('adult-answer') as HTMLInputElement).value='36';click('adult-enter');
+ const counters=document.getElementById('showCounters') as HTMLInputElement;counters.checked=true;counters.dispatchEvent(new Event('change'));
+ for(const id of ['S01','S02','S03','S04','S05','S06','S07','N01','N02','N03','N04','N05','M01','M02','M03','M04','F01']){
+  focus(id);click('diagnostic');const p=debug().problem;expect(document.querySelectorAll('.count-bead,.ten-frames')).toHaveLength(0);
+  click('hint');for(const step of buildScaffold(p)){
+   if(p.choices){document.querySelector<HTMLButtonElement>(`[data-choice="${step.answer}"]`)!.click();click('confirm');}else answer(step.answer);
+  }
+  expect(document.body.textContent).toContain('You built it!');expect(state().attempts.at(-1).representation).toBe('abstract');click('next');
+ }
+ focus('F01');for(let i=0;i<6;i++){
+  click('diagnostic');const p=debug().problem;expect(document.querySelectorAll('.fraction').length).toBeGreaterThan(0);
+  document.querySelector<HTMLButtonElement>(`[data-choice="${p.answer}"]`)!.click();
+  if(p.choices[p.answer].includes('/'))expect(document.querySelector('#answer .fraction')).toBeTruthy();
+  click('confirm');expect(document.querySelectorAll('.fraction').length).toBeGreaterThan(0);click('next');
+ }
+ expect(document.querySelectorAll('.dashboard .fraction').length).toBeGreaterThan(0);
 },20000);

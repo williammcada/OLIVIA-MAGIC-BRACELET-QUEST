@@ -1,4 +1,5 @@
 import type {Problem,Scaffold} from './core';
+import {isExpansion} from './expansion';
 const bead=(i:number,color:string,extra='')=>'<button class="bead count-bead" data-n="'+i+'" style="--bead:'+color+'" aria-label="Bead '+(i+1)+'" '+extra+'></button>';
 function frames(count:number,pink:number,capacity:number,render?:(i:number)=>string){
  const rows=Math.ceil(capacity/10);let html='<div class="ten-frames">';
@@ -6,6 +7,7 @@ function frames(count:number,pink:number,capacity:number,render?:(i:number)=>str
  return html+'</div>';
 }
 export function mathModel(p:Problem,step:Scaffold|null,visual:boolean){
+ if(isExpansion(p.skillId))return '';
  if(!visual)return '<p class="count-note">Lumi is here if you need a hand.</p>';
  const guided=step&&step.mode!=='original',capacity=Math.max(p.a,p.answer)>10?20:Math.max(p.a,p.answer)>5?10:5;
  if(p.kind==='subtract'){

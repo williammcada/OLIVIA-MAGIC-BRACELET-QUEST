@@ -4,7 +4,7 @@
 **Repository:** `williammcada/OLIVIA-MAGIC-BRACELET-QUEST`  
 **Branch:** `main`  
 **Source-preservation checkpoint:** `76148ebc47ad50b0f8116ff5de3b10b827b3d4dd`  
-**Record status:** Current source identity. This is not by itself a functional-test, release, or deployment claim.
+**Record status:** Historical v0.4 recovery source identity; v0.5 candidate is tracked in `VERIFICATION-v0.5.0.md`. This is not by itself a functional-test, release, or deployment claim.
 
 ## Canonical source identity
 
@@ -33,10 +33,10 @@ The checkpoint above identifies the application/planning source immediately befo
 - [`PROJECT-BRIEF.md`](PROJECT-BRIEF.md) records purpose, scope, must-retain behavior and verification requirements.
 - [`change-specs/INDEX.md`](change-specs/INDEX.md) identifies approved or directional change records.
 - [`MIGRATION-NOTE.md`](MIGRATION-NOTE.md) is retained as historical migration context but its pre-upload source-status language is superseded by this baseline.
-- This file controls current source identity when an older brief or note says the source was unknown or “TO ESTABLISH.”
+- This file controls the historical migration source identity when an older brief or note says the source was unknown or “TO ESTABLISH.”
 
 ## Next gate
 
-Preserve the v0.4.0 structured source and verify GitHub Pages, touch controls, iPhone layout, save/reload and the full child-facing progression before another release.
+Preserve this v0.4 recovery baseline. The v0.5 candidate changes source; see the v0.5 change spec and verification record. Verify the actual configured hosting path, touch controls, iPhone layout, save/reload and full child-facing progression before claiming a verified release.
 
 Do not label a future commit a verified release until the exact candidate has passed the project brief’s required verification and that evidence is preserved.

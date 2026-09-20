@@ -15,7 +15,7 @@ function draw(s:SaveService,id:SkillId,count:number,seed=73,correct=true){
  for(let i=0;i<count;i++){const p=engine.next(id,i%5,'practice');problems.push(p);record(s,p,correct);}
  return problems;
 }
-const expectedSizes:Record<SkillId,number>={N0:6,N1:21,A1:21,A2:51,A3:5,A4:66,A5:110,A6:36,A7:231,S1:21,S2:30,S3:66,S4:54,S5:36,S6:231};
+const expectedSizes:Partial<Record<SkillId,number>>={N0:6,N1:21,A1:21,A2:51,A3:5,A4:66,A5:110,A6:36,A7:231,S1:21,S2:30,S3:66,S4:54,S5:36,S6:231};
 
 describe('complete addition and subtraction content',()=>{
  it('contains every ordered sum and every nonnegative subtraction within 20, including boundaries',()=>{
@@ -27,7 +27,7 @@ describe('complete addition and subtraction content',()=>{
   expect(factBank('S6').map(f=>f.key).sort()).toEqual(subtraction.sort());
   for(const f of factBank('A7'))expect(factBank('S6').some(s=>s.a===f.answer&&s.b===f.a&&s.answer===f.b)).toBe(true);
  });
- for(const skill of skills)it(`${skill.id}: all ${expectedSizes[skill.id]} eligible questions appear once before the next normal rotation`,()=>{
+ for(const skill of skills.filter(s=>expectedSizes[s.id]!==undefined))it(`${skill.id}: all ${expectedSizes[skill.id]} eligible questions appear once before the next normal rotation`,()=>{
   const bank=factBank(skill.id),s=focused();
   expect(bank).toHaveLength(expectedSizes[skill.id]);
   expect(new Set(bank.map(f=>f.key)).size).toBe(bank.length);
@@ -66,7 +66,7 @@ describe('short focused sessions and saved practice',()=>{
   expect(e.next('A7',4,'parent-check').skillId).toBe('A7');
  });
  it('automatic review stays below the selected skill and configured ceiling and rotates learned skills',()=>{
-  const s=new SaveService();s.data.settings.maxSkill='A4';for(const p of Object.values(s.data.progress))p.consolidated=true;
+  const s=new SaveService();s.data.settings.auto=true;s.data.settings.maxSkill='A4';for(const p of Object.values(s.data.progress))p.consolidated=true;
   const e=new MathEngine(s,2),reviewed=new Set<SkillId>();
   for(let i=0;i<6;i++){const p=e.next('A4',3,'practice');reviewed.add(p.skillId);record(s,p);}
   expect(reviewed).toEqual(new Set(['N0','N1','A1','S1','A2','A3']));

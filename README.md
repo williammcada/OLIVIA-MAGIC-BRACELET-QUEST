@@ -1,17 +1,22 @@
 # Olivia's Magic Bracelet Quest
 
-Version 0.4.0 — a touch-first, single-player addition and subtraction adventure for Olivia.
+Version 0.5.0 release candidate — a touch-first, single-player primary-math adventure for Olivia.
+
+A WILLIAM MCADA PRODUCT
+
+## Math expansion
+
+17 text-first skills add regrouping through four digits, place value, comparison, missing numbers, word problems, multiplication/division, and simple fractions. Fractions are vertically stacked throughout the interface. New games start at S01 (two-digit subtraction with one regrouping), with manual focus and counting beads off. Existing saved settings remain unchanged; all expanded skills suppress counters regardless of that setting. Collected bracelet beads remain part of the game.
+
+For an existing save: open **Grown-ups**, switch off **Automatic progression**, choose **S01 · Two-digit subtraction with one regrouping** in **Manual / diagnostic skill**, and uncheck **Show bead counters**. Do not reset the game to change these settings.
+
+See [change spec](docs/change-specs/v0.5-MATH-EXPANSION.md), [release-candidate notes](RELEASE_v0.5.0.md), and [verification](docs/VERIFICATION-v0.5.0.md). This is not yet a fully verified device/deployment release.
 
 ## Publish with GitHub Pages
 
-1. Create a new GitHub repository named `olivias-magic-bracelet-quest`.
-2. Upload the contents of this folder to the repository root (not the folder itself).
-3. In the repository, go to **Settings → Pages** and set **Source** to **GitHub Actions**.
-4. Push to `main`. The included workflow verifies the project, builds it, and deploys it.
-5. After the Actions run succeeds, GitHub displays the live URL under **Settings → Pages**. It will normally be:
-   `https://YOUR-GITHUB-USERNAME.github.io/olivias-magic-bracelet-quest/`
+Use the existing canonical repository `williammcada/OLIVIA-MAGIC-BRACELET-QUEST`; do not create a duplicate repository. Preserve the configured hosting method. For a Render static site, the build command is `npm ci && npm run build` and the publish directory is `dist`. Confirm the connected branch and auto-deploy setting in Render before assuming a push is live.
 
-Future updates are simple: replace or edit the source, commit, and push to `main`.
+For Pages, retain the established deployment route; do not assume a workflow exists solely from older packaging notes. The build uses relative asset paths. Verify the actual hosted version, assets, gameplay, and saved progress after deployment. This update does not change hosting configuration.
 
 ## Local development
 

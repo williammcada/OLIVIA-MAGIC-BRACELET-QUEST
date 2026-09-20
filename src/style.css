@@ -137,3 +137,17 @@ input,select,textarea{font-size:max(16px,1em)}
 .flight-progress{display:inline-block;width:70px;height:7px;margin-left:8px;border:1px solid #795ca0;border-radius:6px;background:#fff4d9;overflow:hidden;vertical-align:middle}.flight-progress i{display:block;height:100%;background:#b989e5}
 .dashboard details .note{margin-top:8px}
 @media(max-width:600px){.quest-row{grid-template-columns:1fr}.carried-beads{top:62px}.moon-status{top:58px;max-width:66%;font-size:12px}.world-notice{top:112px;font-size:12px}.studio-layout{min-height:0}.ten-frames{gap:5px}}
+/* Text-first expansion: semantic fractions shared by prompts, choices, and history. */
+.fraction{display:inline-flex;flex-direction:column;align-items:stretch;vertical-align:middle;line-height:1.15;text-align:center;margin:0 .16em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.numerator{border-bottom:2px solid currentColor;padding:0 .15em .08em}
+.denominator{padding:.08em .15em 0}
+.equation:has(.fraction){line-height:2.6}
+.equation.text-prompt{font-size:clamp(18px,2.4vw,28px);white-space:normal;line-height:1.4}
+.choice-keypad{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.choice-keypad button{font-size:clamp(16px,2.3vw,26px);min-height:52px;overflow-wrap:normal}
+.equation:not(.text-prompt){white-space:nowrap;font-size:clamp(20px,4vw,38px)}
+.answer-display{min-height:64px;height:auto}
+.choice-keypad #delete,.choice-keypad #clear,.choice-keypad #confirm{grid-column:auto;grid-row:auto}
+.question-area .equation.text-prompt{font-size:clamp(18px,2.4cqw,28px)}
+.math-screen:has(.choice-keypad){overflow-y:auto}
+.math-card:has(.choice-keypad){flex-shrink:0}

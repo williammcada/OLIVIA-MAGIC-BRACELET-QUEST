@@ -2,7 +2,8 @@ import {LEVEL_REVISION,pickupFor} from './levels';
 import {beadDesigns} from './beads';
 export {beadColors,beadNames} from './beads';
 import {factBank,eligibleFact,evidenceKey,type Fact} from './facts';
-export type SkillId = 'N0'|'N1'|'A1'|'A2'|'A3'|'A4'|'A5'|'A6'|'A7'|'S1'|'S2'|'S3'|'S4'|'S5'|'S6';
+import {expansionSkills,isExpansion,type ExpansionId} from './expansion';
+export type SkillId = ExpansionId|'N0'|'N1'|'A1'|'A2'|'A3'|'A4'|'A5'|'A6'|'A7'|'S1'|'S2'|'S3'|'S4'|'S5'|'S6';
 export const skills: {id:SkillId;label:string;prerequisites:SkillId[];strategy:string}[] = [
  {id:'N0',label:'Seeing numbers to 5',prerequisites:[],strategy:'See small groups without counting every time.'},
  {id:'N1',label:'Making numbers to 5',prerequisites:['N0'],strategy:'A whole can be made from two parts.'},
@@ -18,7 +19,8 @@ export const skills: {id:SkillId;label:string;prerequisites:SkillId[];strategy:s
  {id:'A7',label:'Addition within 20',prerequisites:['A6'],strategy:'Use tens and ones, doubles, or make ten.'},
  {id:'S4',label:'Taking away from teens',prerequisites:['S3','A5'],strategy:'Keep the ten and take away some ones.'},
  {id:'S5',label:'Subtracting across 10',prerequisites:['S4','A6'],strategy:'Take away to reach ten, then take away the rest.'},
- {id:'S6',label:'Subtraction within 20',prerequisites:['S5','A7'],strategy:'Use tens and ones and related addition facts.'}
+ {id:'S6',label:'Subtraction within 20',prerequisites:['S5','A7'],strategy:'Use tens and ones and related addition facts.'},
+ ...expansionSkills.map(([id,label,strategy],i)=>({id,label,strategy,prerequisites:(i?[expansionSkills[i-1][0]]:[]) as SkillId[]}))
 ];
 export interface Quest {id:number;name:string;animal:string;sprite:number;mapSprite?:number;portrait?:string;subtitle:string;story:string;ending:string;color:string}
 export const quests:Quest[] = [
@@ -31,7 +33,7 @@ export const quests:Quest[] = [
 ];
 export const DAY=86400000;
 export function rng(seed:number) {let s=seed>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296;};}
-export interface Problem {id:string;skillId:SkillId;templateId:string;seed:number;a:number;b:number;answer:number;kind:'quantity'|'compose'|'add'|'subtract';layout:number;prompt:string;family:string;}
+export interface Problem {id:string;skillId:SkillId;templateId:string;seed:number;a:number;b:number;answer:number;kind:'quantity'|'compose'|'add'|'subtract'|'text';help?:string;choices?:string[];story?:string;layout:number;prompt:string;family:string;}
 /**
  * v3 seeds encode a bank position and one of four layouts. The sampler chooses
  * the position; encoding it keeps every displayed question reproducible.
@@ -42,6 +44,7 @@ export function generate(skillId:SkillId,seed:number):Problem {
  return {id:`${skillId}-v3-${unsigned}`,skillId,templateId:`${skillId}-v3-${layout}`,seed:unsigned,...fact,layout};
 }
 export function validateProblem(p:Problem){
+ if(isExpansion(p.skillId))return factBank(p.skillId).some(f=>f.prompt===p.prompt&&f.a===p.a&&f.b===p.b&&f.answer===p.answer&&f.kind===p.kind&&f.story===p.story&&JSON.stringify(f.choices)===JSON.stringify(p.choices));
  const kind=p.skillId==='N0'?'quantity':p.skillId==='N1'?'compose':p.skillId.startsWith('S')?'subtract':'add';
  return skills.some(s=>s.id===p.skillId)&&eligibleFact(p.skillId,p.a,p.b)&&p.kind===kind&&
  Number.isInteger(p.answer)&&p.answer>=0&&p.answer<=20&&
@@ -50,6 +53,7 @@ export function validateProblem(p:Problem){
 export interface Scaffold {instruction:string;answer:number;count:number;mode:'part-a'|'part-b'|'whole'|'original'|'take'|'remaining'|'make-ten'|'rest'}
 export function buildScaffold(p:Problem):Scaffold[]{
  const original:Scaffold={instruction:'You built it! Try the original question.',answer:p.answer,count:p.answer,mode:'original'};
+ if(isExpansion(p.skillId))return [{instruction:p.help||'Try the question one step at a time.',answer:p.answer,count:0,mode:'whole'},original];
  if(p.kind==='quantity')return [{instruction:'Touch every bead. Listen as we count.',answer:p.answer,count:p.answer,mode:'whole'},original];
  if(p.kind==='subtract')return [
   {instruction:`Start with ${p.a} beads. How many are in the whole?`,answer:p.a,count:p.a,mode:'whole'},
@@ -65,13 +69,13 @@ export function buildScaffold(p:Problem):Scaffold[]{
   {instruction:'Now count the blue part.',answer:p.b,count:p.b,mode:'part-b'},
   {instruction:p.skillId==='A2'?`Start at ${Math.max(p.a,p.b)}. Add ${Math.min(p.a,p.b)} more.`:p.skillId==='A3'?'Two matching groups. Count them together.':'Bring the two parts together. Count the whole.',answer:p.answer,count:p.answer,mode:'whole'},original];
 }
-export function spokenProblem(p:Problem){return p.kind==='quantity'?p.prompt:`${p.a} ${p.kind==='subtract'?'minus':'plus'} ${p.b}. How many ${p.kind==='subtract'?'are left':'altogether'}?`;}
-export interface Attempt {id:string;sessionId:string;time:number;skillId:SkillId;family:string;templateId:string;seed:number;prompt:string;answer:number;firstResponse:number;firstTryCorrect:boolean;initialIndependent?:boolean;hint:boolean;scaffoldDepth:number;latencyMs:number|null;representation:string;context:'practice'|'gate'|'refill'|'parent-check'}
+export function spokenProblem(p:Problem){if(isExpansion(p.skillId))return `${p.story||''} ${p.prompt}`.replace(/(\d+)\/(\d+)/g,'$1 over $2').replace(/___/g,'blank').replace(/×/g,'times').replace(/÷/g,'divided by').replace(/−/g,'minus');return p.kind==='quantity'?p.prompt:`${p.a} ${p.kind==='subtract'?'minus':'plus'} ${p.b}. How many ${p.kind==='subtract'?'are left':'altogether'}?`;}
+export interface Attempt {story?:string;choices?:string[];id:string;sessionId:string;time:number;skillId:SkillId;family:string;templateId:string;seed:number;prompt:string;answer:number;firstResponse:number;firstTryCorrect:boolean;initialIndependent?:boolean;hint:boolean;scaffoldDepth:number;latencyMs:number|null;representation:string;context:'practice'|'gate'|'refill'|'parent-check'}
 export interface SkillProgress {consolidated:boolean;fluent:boolean;due:number;interval:number;resetAt?:number}
 export interface Bracelet {id:string;name:string;beads:number[];charm:'star'|'moon'|'heart';time:number}
 export interface QuestRun {id:string;quest:number;phase:'story'|'practice'|'platform'|'gate'|'studio'|'result';skill:SkillId;energy:number;collected:number[];checkpoint:number;gateOpen:boolean;practiceDone:number;gateDone:number;rewarded:boolean;beads:number[];design:number[];charm:'star'|'moon'|'heart';braceletId?:string;levelRevision?:number;flight?:{x:number;y:number}}
 export interface Save {schemaVersion:2;createdAt:number;settings:{music:number;sfx:number;readAloud:boolean;reducedMotion:boolean;leftHanded:boolean;showCounters:boolean;sessionMinutes:8|10|15;auto:boolean;maxSkill:SkillId;manualSkill:SkillId};completed:number[];rescued:string[];bracelets:Bracelet[];worn?:string;progress:Record<SkillId,SkillProgress>;attempts:Attempt[];summary:{archived:number};active?:QuestRun;session:{id:string;started:number;last:number;newFamilies:string[]}}
-export function fresh():Save {const now=Date.now();return {schemaVersion:2,createdAt:now,settings:{music:.16,sfx:.4,readAloud:true,reducedMotion:false,leftHanded:false,showCounters:true,sessionMinutes:10,auto:true,maxSkill:'S6',manualSkill:'N0'},completed:[],rescued:[],bracelets:[],progress:Object.fromEntries(skills.map(s=>[s.id,{consolidated:false,fluent:false,due:0,interval:0}])) as Save['progress'],attempts:[],summary:{archived:0},session:{id:`session-${now}`,started:now,last:now,newFamilies:[]}};}
+export function fresh():Save {const now=Date.now();return {schemaVersion:2,createdAt:now,settings:{music:.16,sfx:.4,readAloud:true,reducedMotion:false,leftHanded:false,showCounters:false,sessionMinutes:10,auto:false,maxSkill:'F01',manualSkill:'S01'},completed:[],rescued:[],bracelets:[],progress:Object.fromEntries(skills.map(s=>[s.id,{consolidated:false,fluent:false,due:0,interval:0}])) as Save['progress'],attempts:[],summary:{archived:0},session:{id:`session-${now}`,started:now,last:now,newFamilies:[]}};}
 const validId=(v:unknown)=>skills.some(s=>s.id===v);
 const int=(v:unknown,min:number,max:number)=>typeof v==='number'&&Number.isInteger(v)&&v>=min&&v<=max;
 export function validateSave(v:unknown):v is Save {
@@ -82,7 +86,7 @@ export function validateSave(v:unknown):v is Save {
  skills.every(({id})=>typeof s.progress[id].consolidated==='boolean'&&typeof s.progress[id].fluent==='boolean'&&Number.isFinite(s.progress[id].due)&&int(s.progress[id].interval,0,5))&&
  Array.isArray(s.completed)&&s.completed.every(x=>int(x,0,5))&&Array.isArray(s.rescued)&&s.rescued.every(x=>quests.some(q=>q.animal===x))&&
  Array.isArray(s.bracelets)&&s.bracelets.length<=2000&&s.bracelets.every(b=>typeof b.id==='string'&&typeof b.name==='string'&&b.name.length<=40&&Array.isArray(b.beads)&&b.beads.length>=1&&b.beads.length<=32&&b.beads.every(x=>int(x,0,beadDesigns.length-1))&&['star','moon','heart'].includes(b.charm))&&
- Array.isArray(s.attempts)&&s.attempts.length<=5000&&s.attempts.every(a=>typeof a.id==='string'&&typeof a.sessionId==='string'&&validId(a.skillId)&&Number.isFinite(a.time)&&typeof a.firstTryCorrect==='boolean'&&typeof a.hint==='boolean'&&typeof a.prompt==='string'&&int(a.answer,0,20)&&int(a.firstResponse,0,99)&&(a.latencyMs===null||Number.isFinite(a.latencyMs))&&typeof a.family==='string'&&int(a.scaffoldDepth,0,4))&&Number.isFinite(s.summary.archived)&&
+ Array.isArray(s.attempts)&&s.attempts.length<=5000&&s.attempts.every(a=>typeof a.id==='string'&&typeof a.sessionId==='string'&&validId(a.skillId)&&Number.isFinite(a.time)&&typeof a.firstTryCorrect==='boolean'&&typeof a.hint==='boolean'&&typeof a.prompt==='string'&&(a.story===undefined||typeof a.story==='string')&&(a.choices===undefined||(Array.isArray(a.choices)&&a.choices.length>=2&&a.choices.length<=5&&a.choices.every(c=>typeof c==='string'&&c.length<=200)&&int(a.answer,0,a.choices.length-1)))&&int(a.answer,0,19999)&&int(a.firstResponse,0,99999)&&(a.latencyMs===null||Number.isFinite(a.latencyMs))&&typeof a.family==='string'&&int(a.scaffoldDepth,0,4))&&Number.isFinite(s.summary.archived)&&
  (!s.active||((!s.active.flight||(int(s.active.quest,3,3)&&Number.isFinite(s.active.flight.x)&&s.active.flight.x>=0&&s.active.flight.x<=16000&&Number.isFinite(s.active.flight.y)&&s.active.flight.y>=40&&s.active.flight.y<=185))&&typeof s.active.id==='string'&&int(s.active.quest,0,5)&&validId(s.active.skill)&&['story','practice','platform','gate','studio','result'].includes(s.active.phase)&&int(s.active.energy,0,6)&&int(s.active.practiceDone,0,5)&&int(s.active.gateDone,0,2)&&int(s.active.checkpoint,0,6)&&typeof s.active.gateOpen==='boolean'&&typeof s.active.rewarded==='boolean'&&Array.isArray(s.active.collected)&&s.active.collected.every(x=>int(x,0,1999))&&Array.isArray(s.active.beads)&&s.active.beads.length<=32&&s.active.beads.every(x=>int(x,0,beadDesigns.length-1))&&Array.isArray(s.active.design)&&s.active.design.every(x=>int(x,0,s.active!.beads.length-1))&&new Set(s.active.design).size===s.active.design.length&&['star','moon','heart'].includes(s.active.charm))); } catch{return false;}
 }
 /** Add new skills without resetting old evidence, rescues or bracelets. */
@@ -93,7 +97,8 @@ export function migrateSave(value:unknown):unknown {
  const s=structuredClone(value) as Save;
  if(!s.progress||!s.settings)return value;
  if(schema===1){for(const skill of skills)if(!['N0','N1','A1','A2','A3','A4'].includes(skill.id)&&!s.progress[skill.id])s.progress[skill.id]={consolidated:false,fluent:false,due:0,interval:0};s.schemaVersion=2;if(s.settings.maxSkill==='A4')s.settings.maxSkill='S6';if(s.active){s.active.checkpoint=0;s.active.levelRevision=LEVEL_REVISION;}}
- if(typeof s.settings.showCounters!=='boolean')s.settings.showCounters=true;
+ for(const [id] of expansionSkills)if(!s.progress[id])s.progress[id]={consolidated:false,fluent:false,due:0,interval:0};
+ if(typeof s.settings.showCounters!=='boolean')s.settings.showCounters=false;
  return s;
 }
 export const SAVE_KEY='olivia-quest-v1';

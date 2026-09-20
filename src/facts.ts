@@ -1,13 +1,15 @@
 import type {Problem,SkillId} from './core';
+import {isExpansion,expansionBank} from './expansion';
 
 export interface Fact {
  a:number;b:number;answer:number;kind:Problem['kind'];prompt:string;family:string;
  /** Ordered equations have separate identities; commuted sums share a family. */
- key:string;band:string;
+ key:string;band:string;help?:string;choices?:string[];story?:string;
 }
 
 export function eligibleFact(id:SkillId,a:number,b:number):boolean {
  if(!Number.isInteger(a)||!Number.isInteger(b)||a<0||b<0)return false;
+ if(isExpansion(id))return expansionBank(id).some(f=>f.a===a&&f.b===b);
  const sum=a+b;
  switch(id){
   case 'N0':return a<=5&&b===0;
@@ -48,6 +50,7 @@ function bandFor(a:number,b:number,kind:Problem['kind']):string {
 const banks=new Map<SkillId,readonly Fact[]>();
 /** Exhaustive finite banks, rather than nested random ranges that bias operands. */
 export function factBank(id:SkillId):readonly Fact[] {
+ if(isExpansion(id))return expansionBank(id);
  const cached=banks.get(id);if(cached)return cached;
  const kind:Problem['kind']=id==='N0'?'quantity':id==='N1'?'compose':id.startsWith('S')?'subtract':'add';
  const result:Fact[]=[];
@@ -64,7 +67,8 @@ export function factBank(id:SkillId):readonly Fact[] {
 }
 
 /** Read old evidence from its displayed equation, not a seed from an older generator. */
-export function evidenceKey(a:{skillId:SkillId;prompt:string;answer:number}):string {
+export function evidenceKey(a:{skillId:SkillId;prompt:string;answer:number;story?:string}):string {
+ if(isExpansion(a.skillId))return expansionBank(a.skillId).find(f=>f.prompt===a.prompt&&f.story===a.story&&f.answer===a.answer)?.key||'';
  if(a.skillId==='N0')return `count:${a.answer}`;
  const match=/^(\d+)\s*([+−-])\s*(\d+)\s*=\s*\?$/.exec(a.prompt);
  return match?`${Number(match[1])}${match[2]==='+'?'+':'−'}${Number(match[3])}`:'';

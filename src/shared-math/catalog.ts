@@ -2,6 +2,7 @@ import {Skills,type MathSkill,type Item} from './mega-content';
 import {factBank} from '../facts';
 import {expansionSkills} from '../expansion';
 import type {SkillId} from '../core';
+import {quarterTime} from './quarter-time';
 export type {Item,MathSkill};
 const r=(a:number,b:number)=>a+Math.floor(Math.random()*(b-a+1));
 const item=(prompt:string,answer:string|number,type='number'):Item=>({prompt,answer,type});
@@ -57,7 +58,8 @@ const supplemental:MathSkill[]=[...Object.entries(legacyNames),...expansionSkill
  if(p.choices){answer=p.choices[p.answer];type=['<','>','='].includes(String(answer))?'comparison':String(answer).includes('/')?'fraction':'number';prompt+=' Enter your answer.';}
  return item(prompt,answer,type);
 }}));
-export const catalog:MathSkill[]=[...primary,...supplemental,...Skills.list].sort((a,b)=>a.grade-b.grade);
+const reference=Skills.list.map(s=>s.id==='g3-elapsed'||s.id==='g3-time-addsubtract'?{...s,prereq:quarterTime.id}:s);
+export const catalog:MathSkill[]=[...primary,...supplemental,...reference.flatMap(s=>s.id==='g3-elapsed'?[quarterTime,s]:[s])].sort((a,b)=>a.grade-b.grade);
 export const checkAnswer=(q:Item,a:string)=>q.type==='sequence'?a.replace(/\s/g,'')===String(q.answer).replace(/\s/g,''):Skills.check(q,a);
 export const gradeLabel=(grade:number)=>grade===0?'K':String(grade);
 export function keypadKeys(type:string){const extra=type==='sequence'?[',']:type==='time12'?[':','AM','PM']:type==='time'?[':']:type==='comparison'?['<','>','=']:type==='inequality'?['x','<','>','≤','≥']:['expression','expanded','linear','factored','repeating'].includes(type)?['x','+','×','(',')','^']:[];return ['7','8','9','back','4','5','6','clear','1','2','3','-','0','.','/',' ',...extra];}

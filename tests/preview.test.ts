@@ -8,6 +8,14 @@ import {quarterTimeItem} from '../src/shared-math/quarter-time';
 const click=(id:string)=>document.getElementById(id)!.click();
 const input=(id:string,value:string,event='input')=>{const el=document.getElementById(id) as HTMLInputElement;el.value=value;el.dispatchEvent(new Event(event));};
 function setup(){const state=freshMath();state.config.selected=[];const p=new Practice(state);document.body.innerHTML=settingsHTML(p);wireSettings(p,()=>{},()=>{});return p;}
+test('old Grade3 subtraction remains explicit; removing it restricts new gates to four Grade1 skills',()=>{
+ const state=freshMath();state.config={...state.config,mode:'targeted',lo:3,hi:3,selected:['g3-submissing']};const p=new Practice(state);p.open('practice','old-run');const pending=structuredClone(state.gate);
+ document.body.innerHTML=settingsHTML(p);wireSettings(p,()=>{},()=>{});expect(document.getElementById('grade3-preset')).toBeNull();input('skill-search','subtract');
+ const four=searchSkills('subtract',3,3).filter(s=>s.grade===1);expect(four).toHaveLength(4);for(const skill of four)document.querySelector<HTMLInputElement>(`#skills input[value="${skill.id}"]`)!.click();
+ expect(document.getElementById('selected-heading')!.textContent).toContain('(5)');expect(document.getElementById('selected-list')!.textContent).toContain('Missing subtraction values');document.querySelector<HTMLButtonElement>('[data-unselect="g3-submissing"]')!.click();click('save-settings');expect(document.getElementById('notice')!.textContent).toContain('4 skills');expect(state.gate).toEqual(pending);
+ p.open('practice','new-run');for(let i=0;i<50;i++){expect(four.map(s=>s.id)).toContain(state.gate!.item.skillId);p.next();}
+ click('clear-selection');expect(document.querySelectorAll('[data-unselect]')).toHaveLength(0);expect(state.config.selected).toHaveLength(4);
+});
 test('search crosses grade filters, matches standard/name/id, is grade ordered, preserves hidden checks',()=>{
  const p=setup();input('skill-search','TIME');const results=searchSkills('TIME',2,2);expect(results.some(s=>s.grade===1)).toBe(true);expect(results.some(s=>s.grade===4)).toBe(true);expect(results.map(s=>s.grade)).toEqual(results.map(s=>s.grade).sort());expect(searchSkills('3.MD.A.1',0,0).some(s=>s.id==='g3-time-quarter')).toBe(true);
  const el=document.querySelector<HTMLInputElement>('#skills input[value="g4-timeback"]')!;el.click();expect((document.getElementById('hi') as HTMLInputElement).value).toBe('4');input('skill-search','addition');input('skill-search','time');expect(document.querySelector<HTMLInputElement>('#skills input[value="g4-timeback"]')!.checked).toBe(true);expect(p.state.config.selected).toEqual([]);

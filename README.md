@@ -1,10 +1,12 @@
 # Olivia's Magic Bracelet Quest
 
-**v0.7.0-rc.1 — synchronized math settings release candidate.** A WILLIAM MCADA PRODUCT.
+**v0.7.1-rc.1 — synchronized math settings release candidate.** A WILLIAM MCADA PRODUCT.
 
 Olivia now uses Mega Man Math v0.5's math selection controls, response keypad and progression rules, extended to kindergarten, Grade 1 and Grade 2. All 169 Grade 3–7 reference skills are retained, alongside 38 new K–2 skills and 32 retained Olivia practice skills (240 total, including the new quarter-hour time skill). The adventures, rescues, cloud flight, saved bracelets and reward beads remain.
 
 Search all grades and preview one question per checked skill with **Preview selected skills**, beside **Save settings**. Preview uses current unsaved selections and does not change student progress or active gates. Both Olivia and Mega Man now use the same component. See [v0.7 notes](RELEASE_v0.7.0.md), [shared v2 contract](docs/SHARED-MATH-v2.md), and [current verification](docs/VERIFICATION-v0.7.0.md).
+
+Latest repair: [v0.7.1 notes](RELEASE_v0.7.1.md). The complete selected list is visible next to Save. Use Clear selection to replace previous choices, or Remove to drop an individual skill. The Grade 3 shortcut has been removed.
 
 ## Choose math
 

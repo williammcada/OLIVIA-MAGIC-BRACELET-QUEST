@@ -1,5 +1,7 @@
 # Project Brief — Olivia's Magic Bracelet Quest
 
+Current repair: v0.7.1-rc.1 removes Use Grade 3, exposes all selected skills next to Save, and provides Clear selection/Remove. Targeted saves list actual skill names/count. Confirmed new-adventure route respects the newly saved selection. See current repair release notes; no changes to next-gate snapshot semantics.
+
 ## Current shared-settings revision — 2026-10-01
 
 v0.7.0-rc.1 uses shared math v2: 240 K–7 skills, cross-grade search, one-per-checked-skill previews beside Save settings, and quarter-hour start/end-time practice. Both Olivia and Mega Man use the same canonical component from Olivia src/shared-math. Current handbook S-03-M is saved at 4180807; source reads U-10 revision 9ec5c8d, S-02/03/04 dad2d3a, checklist fbab310. Preserve game-specific controls, triggers, rewards and accepted defaults. Search expands draft range only when selecting an out-of-range result; preview never saves or changes evidence/gates. See the synchronized-settings change specification and current release notes for exact source/verification. Hosting: established GitHub Pages deploy-on-main route (v0.6 was verified live).

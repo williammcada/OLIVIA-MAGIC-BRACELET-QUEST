@@ -7,7 +7,7 @@ import {levels,MOTION,moonTarget,type Level,type Ledge,type Enemy} from './level
 import type {AudioService} from './audio';
 export function asset(name:string){return (window as unknown as {__OLIVIA_ASSETS__?:Record<string,string>}).__OLIVIA_ASSETS__?.[name]||'./art/'+name;}
 export const controls={left:false,right:false,up:false,down:false,jump:false,interact:false,power:false,moon:false};
-export function clearControls(){Object.keys(controls).forEach(k=>controls[k as keyof typeof controls]=false);}
+export function clearControls(){window.dispatchEvent(new Event('olivia-input-reset'));Object.keys(controls).forEach(k=>controls[k as keyof typeof controls]=false);}
 export interface WorldStatus {moonSeconds:number;moonHint:string;message:string;ride:boolean;flight?:{progress:number;boostReady:boolean;flying:boolean}}
 export interface WorldHooks {save:SaveService;session:SessionService;audio:AudioService;gate:()=>void;refill:()=>void;rescue:()=>void;pause:()=>void;hud:(context:string,status?:WorldStatus)=>void;ready:()=>void;screen:(name:string)=>void;}
 let hooks:WorldHooks;
@@ -139,7 +139,7 @@ export class PlatformScene extends Phaser.Scene {
   }
   if(time>this.springUntil&&body.velocity.y>=0&&l.springs.some(x=>Math.abs(this.player.x-x)<18&&body.bottom>174&&body.bottom<201)){this.springUntil=time+650;this.player.setVelocityY(-285);hooks.audio.tone(740,.14);}
   if(!r.gateOpen&&this.player.x>l.gate-22){const vy=body.velocity.y;body.reset(l.gate-22,this.player.y);this.player.setVelocity(0,vy);}this.gateImage.setAlpha(r.gateOpen?.38:1);
-  if(this.player.y>255){body.reset(l.checkpoints[r.checkpoint]||l.checkpoints[0],154);this.player.setVelocity(0,0);this.invulnerable=time+1300;this.lastGround=-10000;this.jumpBuffer=0;this.say('Back on the path. You kept every bead!');}
+  if(this.player.y>255){clearControls();this.input.keyboard?.resetKeys();body.reset(l.checkpoints[r.checkpoint]||l.checkpoints[0],154);this.player.setVelocity(0,0);this.invulnerable=time+1300;this.lastGround=-10000;this.jumpBuffer=0;this.say('Back on the path. You kept every bead!');}
   if(grounded&&this.player.y<204){let checkpoint=r.checkpoint;l.checkpoints.forEach((x,i)=>{if(this.player.x>=x&&i>checkpoint)checkpoint=i;});if(checkpoint!==r.checkpoint){r.checkpoint=checkpoint;hooks.save.persist();}}
   const nearGate=!r.gateOpen&&Math.abs(this.player.x-(l.gate-24))<46,nearWell=l.wells.some(x=>Math.abs(this.player.x-x)<38),nearAnimal=this.player.x>l.rescue-48&&r.gateOpen;
   this.context=nearGate?'Open rainbow gate':nearWell?'Fill sparkle energy':nearAnimal?'Help '+quests[r.quest].animal:'';this.report();
@@ -147,3 +147,4 @@ export class PlatformScene extends Phaser.Scene {
  }
 }
 export const screenNames=['TitleScene','WorldMapScene','MathStationScene','MathOverlayScene','BraceletStudioScene','QuestResultScene','ParentDashboardScene'];
+

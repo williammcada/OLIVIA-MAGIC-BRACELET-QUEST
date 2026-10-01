@@ -1,3 +1,4 @@
+import {freshMath,validMath,type MathState} from './shared-math/engine';
 import {LEVEL_REVISION,pickupFor} from './levels';
 import {beadDesigns} from './beads';
 export {beadColors,beadNames} from './beads';
@@ -74,14 +75,14 @@ export interface Attempt {story?:string;choices?:string[];id:string;sessionId:st
 export interface SkillProgress {consolidated:boolean;fluent:boolean;due:number;interval:number;resetAt?:number}
 export interface Bracelet {id:string;name:string;beads:number[];charm:'star'|'moon'|'heart';time:number}
 export interface QuestRun {id:string;quest:number;phase:'story'|'practice'|'platform'|'gate'|'studio'|'result';skill:SkillId;energy:number;collected:number[];checkpoint:number;gateOpen:boolean;practiceDone:number;gateDone:number;rewarded:boolean;beads:number[];design:number[];charm:'star'|'moon'|'heart';braceletId?:string;levelRevision?:number;flight?:{x:number;y:number}}
-export interface Save {schemaVersion:2;createdAt:number;settings:{music:number;sfx:number;readAloud:boolean;reducedMotion:boolean;leftHanded:boolean;showCounters:boolean;sessionMinutes:8|10|15;auto:boolean;maxSkill:SkillId;manualSkill:SkillId};completed:number[];rescued:string[];bracelets:Bracelet[];worn?:string;progress:Record<SkillId,SkillProgress>;attempts:Attempt[];summary:{archived:number};active?:QuestRun;session:{id:string;started:number;last:number;newFamilies:string[]}}
-export function fresh():Save {const now=Date.now();return {schemaVersion:2,createdAt:now,settings:{music:.16,sfx:.4,readAloud:true,reducedMotion:false,leftHanded:false,showCounters:false,sessionMinutes:10,auto:false,maxSkill:'F01',manualSkill:'S01'},completed:[],rescued:[],bracelets:[],progress:Object.fromEntries(skills.map(s=>[s.id,{consolidated:false,fluent:false,due:0,interval:0}])) as Save['progress'],attempts:[],summary:{archived:0},session:{id:`session-${now}`,started:now,last:now,newFamilies:[]}};}
+export interface Save {mathPractice?:MathState;schemaVersion:2;createdAt:number;settings:{music:number;sfx:number;readAloud:boolean;reducedMotion:boolean;leftHanded:boolean;showCounters:boolean;sessionMinutes:8|10|15;auto:boolean;maxSkill:SkillId;manualSkill:SkillId};completed:number[];rescued:string[];bracelets:Bracelet[];worn?:string;progress:Record<SkillId,SkillProgress>;attempts:Attempt[];summary:{archived:number};active?:QuestRun;session:{id:string;started:number;last:number;newFamilies:string[]}}
+export function fresh():Save {const now=Date.now();return {mathPractice:freshMath(),schemaVersion:2,createdAt:now,settings:{music:.16,sfx:.4,readAloud:true,reducedMotion:false,leftHanded:false,showCounters:false,sessionMinutes:10,auto:false,maxSkill:'F01',manualSkill:'S01'},completed:[],rescued:[],bracelets:[],progress:Object.fromEntries(skills.map(s=>[s.id,{consolidated:false,fluent:false,due:0,interval:0}])) as Save['progress'],attempts:[],summary:{archived:0},session:{id:`session-${now}`,started:now,last:now,newFamilies:[]}};}
 const validId=(v:unknown)=>skills.some(s=>s.id===v);
 const int=(v:unknown,min:number,max:number)=>typeof v==='number'&&Number.isInteger(v)&&v>=min&&v<=max;
 export function validateSave(v:unknown):v is Save {
  if(!v||typeof v!=='object')return false;
  const s=v as Save;
- try {return s.schemaVersion===2 && typeof s.createdAt==='number' && typeof s.session.id==='string'&&Number.isFinite(s.session.started)&&Number.isFinite(s.session.last)&&Array.isArray(s.session.newFamilies)&&s.session.newFamilies.every(x=>typeof x==='string')&&s.session.newFamilies.length<1000&&
+ try {return (s.mathPractice===undefined||validMath(s.mathPractice))&&s.schemaVersion===2 && typeof s.createdAt==='number' && typeof s.session.id==='string'&&Number.isFinite(s.session.started)&&Number.isFinite(s.session.last)&&Array.isArray(s.session.newFamilies)&&s.session.newFamilies.every(x=>typeof x==='string')&&s.session.newFamilies.length<1000&&
  typeof s.settings.auto==='boolean'&&validId(s.settings.maxSkill)&&validId(s.settings.manualSkill)&&[8,10,15].includes(s.settings.sessionMinutes)&&['music','sfx'].every(k=>{const a=s.settings[k as 'music'];return Number.isFinite(a)&&a>=0&&a<=1;})&&['readAloud','reducedMotion','leftHanded','showCounters'].every(k=>typeof s.settings[k as 'readAloud']==='boolean')&&
  skills.every(({id})=>typeof s.progress[id].consolidated==='boolean'&&typeof s.progress[id].fluent==='boolean'&&Number.isFinite(s.progress[id].due)&&int(s.progress[id].interval,0,5))&&
  Array.isArray(s.completed)&&s.completed.every(x=>int(x,0,5))&&Array.isArray(s.rescued)&&s.rescued.every(x=>quests.some(q=>q.animal===x))&&
@@ -99,6 +100,7 @@ export function migrateSave(value:unknown):unknown {
  if(schema===1){for(const skill of skills)if(!['N0','N1','A1','A2','A3','A4'].includes(skill.id)&&!s.progress[skill.id])s.progress[skill.id]={consolidated:false,fluent:false,due:0,interval:0};s.schemaVersion=2;if(s.settings.maxSkill==='A4')s.settings.maxSkill='S6';if(s.active){s.active.checkpoint=0;s.active.levelRevision=LEVEL_REVISION;}}
  for(const [id] of expansionSkills)if(!s.progress[id])s.progress[id]={consolidated:false,fluent:false,due:0,interval:0};
  if(typeof s.settings.showCounters!=='boolean')s.settings.showCounters=false;
+ if(s.mathPractice===undefined){s.mathPractice=freshMath(s.settings.manualSkill,s.settings.auto,s.settings.maxSkill);s.mathPractice.note='Upgraded to shared math settings. Your prior focus and rewards are retained; old evidence is archived separately. Any old unfinished math gate restarts. New mastery begins with new first attempts.';}
  return s;
 }
 export const SAVE_KEY='olivia-quest-v1';
@@ -217,3 +219,4 @@ export class SessionService {
  finishBracelet(name:string){const s=this.save.data,r=s.active!;if(r.braceletId)return;const b:Bracelet={id:`bracelet-${r.id}`,name:name.trim().slice(0,40)||'Rainbow Friendship',beads:r.design.map(i=>r.beads[i]),charm:r.charm,time:Date.now()};if(!b.beads.length||b.beads.length!==r.beads.length||new Set(r.design).size!==r.beads.length||r.design.some(i=>!Number.isInteger(i)||i<0||i>=r.beads.length))throw Error('Place every bead first.');s.bracelets.push(b);s.worn=b.id;r.braceletId=b.id;r.phase='result';this.save.persist();}
 }
 export function validateContent(){if(new Set(skills.map(x=>x.id)).size!==skills.length)throw Error('Duplicate skill');for(const s of skills){if(s.prerequisites.some(x=>!skills.some(k=>k.id===x)))throw Error('Unknown prerequisite');for(let seed=0;seed<factBank(s.id).length*4;seed++)if(!validateProblem(generate(s.id,seed)))throw Error('Invalid generated item');}}
+

@@ -1,13 +1,13 @@
 # Project Brief — Olivia's Magic Bracelet Quest
 
-**Brief version:** 0.4 — v0.5.0 math-expansion candidate  
-**Current candidate:** GitHub checkpoint `02118eda538775dc197859adae02cabf5b002b36`, full tree `270f72cff28e268b3811e8229481429c7db040c0`; see [verification record](VERIFICATION-v0.5.0.md). Historical v0.4 baseline details below are preserved for recovery.
+**Brief version:** 0.5 — v0.6.0-rc.1 shared K–7 math candidate  
+**Historical v0.5 candidate:** GitHub checkpoint `02118eda538775dc197859adae02cabf5b002b36`, full tree `270f72cff28e268b3811e8229481429c7db040c0`; see [verification record](VERIFICATION-v0.5.0.md). Historical v0.4 baseline details below are preserved for recovery.
 **Owner:** William McAda · **Credit:** A WILLIAM MCADA PRODUCT  
-**Status:** v0.5.0 implementation candidate; automated verification and unrun browser/device/deployment checks are tracked in `VERIFICATION-v0.5.0.md`.  
+**Status:** v0.6.0-rc.1 implementation candidate; current evidence is in `VERIFICATION-v0.6.0.md`. Historical v0.5 automated verification and unrun browser/device/deployment checks are tracked in `VERIFICATION-v0.5.0.md`.  
 **Repository:** `williammcada/OLIVIA-MAGIC-BRACELET-QUEST`, branch `main`.  
-**Current running version:** Unverified. The structured v0.4.0-labeled source is preserved; this normalization did not rerun tests or verify the hosted site.  
+**Current running version:** Unverified. v0.6 automated checks pass (138 tests, build, seven Chromium checks). The user explicitly approved public repository publication on 2026-10-01 after the initial approval-review block. Repository publication does not verify the hosted site. Historical source records below remain preserved.  
 **Source/baseline:** Canonical preserved source: structured repository at checkpoint `76148ebc47ad50b0f8116ff5de3b10b827b3d4dd`, with `src/` tree `ab4ef6c6dca531aa880b1e821b8d36b9b75f883a`, root `index.html` blob `78eaba29cd396bac176fd430d7e82e8c02341c3a`, and `public/` assets tree `cc9654c7328d2f6ba8537bfc935b3742811ffe02`. Repository release records label v0.4.0; live deployment remains unverified.  
-**Next work:** Verify the v0.5.0 candidate in a real browser, on intended iPhone/touch devices, and at the actual hosted URL before calling it a verified release. Preserve the existing hosting route (user reports Render).  
+**Next work:** Test intended physical iPhone/touch devices and the actual hosted URL after repository publication. Real Chromium verification has passed; see the v0.6 record. Preserve the existing hosting route (user reports Render).  
 
 ## 1. Purpose, audience and detailed scope
 
@@ -20,6 +20,12 @@
 - Use accepted GitHub Branch Deploy packaging where applicable. Prior hidden .github workflow uploads failed; do not force a manual workflow repair back into the standard upload route.
 
 ## 2. This task and boundaries
+
+Current task: implement [v0.6 shared math](change-specs/v0.6-SHARED-MATH.md) from Olivia `8c5bb189146e7390e28f29fcd5f50741295d14b2`. Use the recovered Mega Man v0.5 actual file (169 G3–7 skills), extend to K–2 and use its settings/keypad/selection/progression/next-gate logic. Preserve the requested S01 fresh default, all six adventures, rewards and saved history. Old scaffolds/mastery settings are superseded by this explicit request; old evidence remains archived. Counting aids are absent from all current math encounters. This takes precedence over historical scope below. Other games remain unchanged. See `SHARED-MATH.md` and `VERIFICATION-v0.6.0.md`.
+
+Current handbook file blobs: AI-START-HERE `6557a45aaa6d29d7d1abde808e6d0ac248b08820`; UNIVERSAL-RULES `9ec5c8d2b9ab2757c043892b5d7218bc6090da04` (including approved U-09/U-10); CONDITIONAL-STANDARDS `dad2d3a05ca0f18260196ea51ac6351bffffdc1c` (S-02/03/04); RELEASE-CHECKLIST `fbab310ffaa75f477f8d63b1885fa0cfeb2b20dd`. These are file blob revisions, not repository commit SHAs. No handbook modifications.
+
+Historical v0.5 task follows for recovery:
 
 Implement the approved [v0.5 math expansion](change-specs/v0.5-MATH-EXPANSION.md) from exact baseline `7b34b5be6e51983dd1e8f2c83bfeab3dcbb42776`. Add 17 text-first skills, stacked fractions on every math surface, S01/manual focus and counters-off fresh defaults. Preserve existing saved choices; no manufactured mastery. Existing bracelet rewards, all environments/assets, and introductory skills remain. The detailed specification records answer formats, bank bounds, corrected examples and text-only support. The historical v0.4 source identities below remain recovery references, not the current candidate.
 
